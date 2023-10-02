@@ -38,7 +38,7 @@ public class MainController {
         }
     }
 
-    @GetMapping("/getClusterInfo")
+    @GetMapping("/clusterinfo")
     public List<PgDistNodeDto> getClusterInfo() {
         return clusterService.getClusterInfo();
     }
