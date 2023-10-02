@@ -2,7 +2,7 @@ package sbp.hack.hackdemo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sbp.hack.hackdemo.dto.PgDistNodeDto;
+import sbp.hack.hackdemo.entity.PgDistNodeEntity;
 import sbp.hack.hackdemo.repository.ClusterRepository;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 public class ClusterService {
     private final ClusterRepository clusterRepository;
 
-    public List<PgDistNodeDto> getClusterInfo() {
+    public List<PgDistNodeEntity> getClusterInfo() {
         return clusterRepository.getClusterNodesInfo();
     }
 }
