@@ -13,11 +13,9 @@ public class ClusterRepository {
     private EntityManager entityManager;
 
     public List<PgDistNodeDto> getClusterNodesInfo() {
-        List<PgDistNodeDto> result =
-        entityManager.createNativeQuery(
-                "SELECT * from pg_dist_node"
+        return entityManager.createNativeQuery(
+                "select * from pg_dist_node"
                 )
                 .getResultList();
-        return result;
     }
 }
