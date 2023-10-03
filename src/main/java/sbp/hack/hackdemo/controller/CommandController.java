@@ -2,6 +2,7 @@ package sbp.hack.hackdemo.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import sbp.hack.hackdemo.dto.RqNodePort;
 import sbp.hack.hackdemo.service.CitusService;
 
 
@@ -12,7 +13,7 @@ public class CommandController {
 
     private final CitusService citusService;
 
-    @GetMapping("/rebalance")
+    @PostMapping("/rebalance")
     public String startRebalance() {
         citusService.doBalance();
         return null;
@@ -23,10 +24,9 @@ public class CommandController {
         return citusService.getStatus();
     }
 
-    @GetMapping("/add/node")
-    public String addNode(@RequestParam(name = "node") String node,
-                          @RequestParam(name = "node") String port) {
-        citusService.addNode(node, port);
+    @PostMapping("/add/node")
+    public String addNode(@RequestBody RqNodePort rqNodePort) {
+        citusService.addNode(rqNodePort.getNode(), rqNodePort.getPort());
         return null;
     }
 
