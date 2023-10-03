@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sbp.hack.hackdemo.dao.ClusterInfoDao;
 import sbp.hack.hackdemo.dto.NodeInfoDTO;
 import sbp.hack.hackdemo.entity.PgDistNodeEntity;
 import sbp.hack.hackdemo.service.ClusterService;
@@ -62,7 +63,7 @@ public class InfoController {
     }
 
     @GetMapping("/cluster")
-    public List<PgDistNodeEntity> getClusterInfo() {
+    public List<ClusterInfoDao> getClusterInfo() {
         return clusterService.getClusterInfo();
     }
 }
