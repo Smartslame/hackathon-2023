@@ -1,0 +1,65 @@
+package sbp.hack.hackdemo.repository;
+
+import lombok.AllArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+import sbp.hack.hackdemo.model.NodeTable;
+
+import java.util.List;
+
+@Service
+@AllArgsConstructor
+public class NodesTableInfoRepository {
+
+    private JdbcTemplate jdbcTemplate;
+
+    public List<NodeTable> getTableNodeInfoCitus() {
+        return jdbcTemplate.query(
+                "SELECT cs.table_name, \n" +
+                        "cs.nodename as node_name, \n" +
+                        "sum(cs.shard_size) as byte_size,\n" +
+                        "pg_size_pretty(sum(cs.shard_size)) as pretty_size\n" +
+                        "FROM citus_shards cs\n" +
+                        "group by cs.table_name, cs.nodename\n" +
+                        "order by byte_size desc", (rs, rowNum) -> {
+                            NodeTable nodeInfo = new NodeTable();
+                            nodeInfo.setTableName(rs.getString(1));
+                            nodeInfo.setNode(rs.getString(2));
+                            nodeInfo.setByteSize(rs.getLong(3));
+                            nodeInfo.setPrettySize(rs.getString(4));
+                            return nodeInfo;
+                        }
+        );
+
+    }
+
+    public List<NodeTable> getTableNodeInfoMaster() {
+        return jdbcTemplate.query(
+                "SELECT\n" +
+                        "relname AS table_name,\n" +
+                        "pdn.nodename as node_name,\n" +
+                        "pg_total_relation_size(C .oid) AS byte_size, \n" +
+                        "pg_size_pretty(pg_total_relation_size(C .oid)) AS pretty_size \n" +
+                        "FROM\n" +
+                        "pg_class C\n" +
+                        "LEFT JOIN pg_namespace N ON (N.oid = C .relnamespace)\n" +
+                        "LEFT JOIN (SELECT nodename, shouldhaveshards from pg_dist_node) pdn \n" +
+                        "ON pdn.shouldhaveshards=false\n" +
+                        "WHERE\n" +
+                        "nspname NOT IN ('pg_catalog','information_schema')\n" +
+                        "AND C .relkind <> 'i'\n" +
+                        "AND nspname !~ '^pg_toast'\n" +
+                        "AND relname not in (SELECT DISTINCT cs.table_name::varchar(255) FROM citus_shards cs)\n" +
+                        "ORDER BY byte_size DESC", (rs, rowNum) -> {
+                            NodeTable nodeInfo = new NodeTable();
+                            nodeInfo.setTableName(rs.getString(1));
+                            nodeInfo.setNode(rs.getString(2));
+                            nodeInfo.setByteSize(rs.getLong(3));
+                            nodeInfo.setPrettySize(rs.getString(4));
+                            return nodeInfo;
+                        }
+        );
+    }
+
+
+}
