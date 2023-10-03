@@ -62,10 +62,8 @@ public class InfoController {
         }
     }
 
-    @GetMapping("/api/cluster-info")
-    public List<ClusterInfoDao> getClusterInfo() {
     @GetMapping("/cluster")
-    public List<PgDistNodeEntity> getClusterInfo() {
+    public List<ClusterInfoDao> getClusterInfo() {
         return clusterService.getClusterInfo();
     }
 }
