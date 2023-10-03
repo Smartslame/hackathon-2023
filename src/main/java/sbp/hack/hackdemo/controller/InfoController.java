@@ -56,13 +56,6 @@ public class InfoController {
         return tableService.getDependentTables(tableName);
     }
 
-    @GetMapping("/stupid")
-    public void stupid() {
-        for (int i = 0; i < 10000; ++i) {
-            tableService.listDicts();
-        }
-    }
-
     @GetMapping("/cluster")
     public List<ClusterInfoDao> getClusterInfo() {
         return clusterService.getClusterInfo();

@@ -2,12 +2,13 @@ package sbp.hack.hackdemo.repository;
 
 import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sbp.hack.hackdemo.model.NodeTable;
 
 import java.util.List;
 
-@Service
+@Repository
 @AllArgsConstructor
 public class NodesTableInfoRepository {
 
