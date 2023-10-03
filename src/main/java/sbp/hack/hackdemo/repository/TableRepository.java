@@ -43,6 +43,20 @@ public class TableRepository {
         return doGetDependentTablesFromDb(tokens.get(1));
     }
 
+    public List<String> getPk(String tableName) {
+        Query q = entityManager.createNativeQuery(
+                "SELECT c.column_name\n" +
+                "FROM information_schema.table_constraints tc\n" +
+                "JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_name)\n" +
+                "JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema\n" +
+                "AND tc.table_name = c.table_name AND ccu.column_name = c.column_name\n" +
+                "WHERE tc.table_name = :tableName");
+
+        q.setParameter("tableName", tableName);
+
+        return q.getResultList();
+    }
+
     private List<String> doGetDependentTablesFromDb(String tableNameTrimmed) {
         Query q = entityManager.createNativeQuery(
                 "SELECT table_name\n" +

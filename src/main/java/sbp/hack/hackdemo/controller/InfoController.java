@@ -7,12 +7,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import sbp.hack.hackdemo.dao.ClusterInfoDao;
 import sbp.hack.hackdemo.dto.NodeInfoDTO;
-import sbp.hack.hackdemo.entity.PgDistNodeEntity;
 import sbp.hack.hackdemo.service.ClusterService;
 import sbp.hack.hackdemo.service.InfoService;
 import sbp.hack.hackdemo.service.TableService;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.Map;
 
@@ -31,10 +29,9 @@ public class InfoController {
                                               @RequestParam(name = "page", defaultValue = "1") Integer page,
                                               @RequestParam(name = "per_page", defaultValue = "20") Integer perPage) {
         Integer offset = perPage * (page - 1);
-        if (isCoordinator) {
-            return infoService.getCoordinatorInfo(offset, perPage);
-        }
-        return infoService.getCitusInfo(offset, perPage);
+        return isCoordinator
+                ? infoService.getCoordinatorInfo(offset, perPage)
+                : infoService.getCitusInfo(offset, perPage);
     }
 
     @GetMapping("/dicts")
@@ -53,7 +50,7 @@ public class InfoController {
     }
 
     @GetMapping("/dependent")
-    public List<String> dependentTables(@PathParam("tableName") String tableName) {
+    public List<String> dependentTables(@RequestParam("tableName") String tableName) {
         return tableService.getDependentTables(tableName);
     }
 
