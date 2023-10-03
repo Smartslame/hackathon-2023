@@ -36,13 +36,6 @@ public class TableService {
         return response;
     }
 
-    private void tryFetch(String refTableName, Map<String, List<String>> response) {
-        try {
-            response.put(refTableName, tableRepository.getDescriptionFromReferenceTable(refTableName));
-        } catch (Exception ignored) {
-        }
-    }
-
     public List<String> getNonDictTables() {
         return tableRepository.getTables().stream().filter(name -> !isDict(name)).collect(Collectors.toList());
     }
@@ -68,5 +61,16 @@ public class TableService {
 
     public List<String> getDependentTables(String tableName) {
         return tableRepository.getDependentTables(tableName);
+    }
+
+    public List<String> getPk(String tableName) {
+        return tableRepository.getPk(tableName);
+    }
+
+    private void tryFetch(String refTableName, Map<String, List<String>> response) {
+        try {
+            response.put(refTableName, tableRepository.getDescriptionFromReferenceTable(refTableName));
+        } catch (Exception ignored) {
+        }
     }
 }

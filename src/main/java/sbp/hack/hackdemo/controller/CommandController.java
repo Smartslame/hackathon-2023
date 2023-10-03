@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.*;
 import sbp.hack.hackdemo.dto.DistributionRq;
 import sbp.hack.hackdemo.dto.RqNodePort;
 import sbp.hack.hackdemo.service.CitusService;
+import sbp.hack.hackdemo.service.TableService;
+
+import java.util.List;
 
 
 @RestController
@@ -13,10 +16,16 @@ import sbp.hack.hackdemo.service.CitusService;
 public class CommandController {
 
     private final CitusService citusService;
+    private final TableService tableService;
 
     @PostMapping("/rebalance")
     public void startRebalance() {
         citusService.doBalance();
+    }
+
+    @GetMapping("/pk")
+    public List<String> getPk(@RequestParam("tableName") String tableName) {
+        return tableService.getPk(tableName);
     }
 
     @GetMapping("/rebalance/status")
