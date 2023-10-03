@@ -62,7 +62,7 @@ public class InfoService {
     }
 
     private static String getPrettySize(Long size) {
-        String[] postfixes = {"B", "kB", "M", "G", "T"};
+        String[] postfixes = {"B", "kB", "MB", "GB", "TB"};
         double current = size.doubleValue();
         int i = 0;
         while ((current / 1024.) > 1.0) {
