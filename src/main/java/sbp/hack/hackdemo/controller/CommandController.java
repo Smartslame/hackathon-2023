@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sbp.hack.hackdemo.dto.DistributionRq;
 import sbp.hack.hackdemo.dto.RqNodePort;
+import sbp.hack.hackdemo.dto.StringValue;
 import sbp.hack.hackdemo.service.CitusService;
 import sbp.hack.hackdemo.service.TableService;
 
@@ -44,13 +45,13 @@ public class CommandController {
     }
 
     @PostMapping("/undistribute")
-    public void undistributeTable(@RequestBody String tableName) {
-        citusService.undistributeTable(tableName);
+    public void undistributeTable(@RequestBody StringValue tableName) {
+        citusService.undistributeTable(tableName.getValue());
     }
 
     @PostMapping("/make-reference")
-    public void makeReferenceTable(@RequestBody String tableName) {
-        citusService.makeReference(tableName);
+    public void makeReferenceTable(@RequestBody StringValue tableName) {
+        citusService.makeReference(tableName.getValue());
     }
 
     @PostMapping("/unreference")
