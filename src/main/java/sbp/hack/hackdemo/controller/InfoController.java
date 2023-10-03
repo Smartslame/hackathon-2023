@@ -62,7 +62,7 @@ public class InfoController {
     }
 
     @GetMapping("/cluster")
-    public List<PgDistNodeEntity> getClusterInfo() {
+    public List<ClusterInfoDao> getClusterInfo() {
         return clusterService.getClusterInfo();
     }
 }
