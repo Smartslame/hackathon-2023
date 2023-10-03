@@ -27,12 +27,14 @@ public class InfoController {
     private final InfoService infoService;
 
     @GetMapping("/table-node-info")
-    public List<NodeInfoDTO> getTableNodeInfo(@RequestParam(name = "isCoordinator", defaultValue = "false") Boolean isCoordinator) {
+    public List<NodeInfoDTO> getTableNodeInfo(@RequestParam(name = "isCoordinator", defaultValue = "false") Boolean isCoordinator,
+                                              @RequestParam(name = "page", defaultValue = "1") Integer page,
+                                              @RequestParam(name = "per_page", defaultValue = "20") Integer perPage) {
+        Integer offset = perPage * (page - 1);
         if (isCoordinator) {
-            return infoService.getCoordinatorInfo();
+            return infoService.getCoordinatorInfo(offset, perPage);
         }
-
-        return infoService.getCitusInfo();
+        return infoService.getCitusInfo(offset, perPage);
     }
 
     @GetMapping("/dicts")

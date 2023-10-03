@@ -13,7 +13,7 @@ public class NodesTableInfoRepository {
 
     private JdbcTemplate jdbcTemplate;
 
-    public List<NodeTable> getTableNodeInfoCitus() {
+    public List<NodeTable> getTableNodeInfoCitus(Integer offset, Integer perPage) {
         return jdbcTemplate.query(
                 "SELECT cs.table_name, \n" +
                         "cs.nodename as node_name, \n" +
@@ -21,19 +21,20 @@ public class NodesTableInfoRepository {
                         "pg_size_pretty(sum(cs.shard_size)) as pretty_size\n" +
                         "FROM citus_shards cs\n" +
                         "group by cs.table_name, cs.nodename\n" +
-                        "order by byte_size desc", (rs, rowNum) -> {
-                            NodeTable nodeInfo = new NodeTable();
-                            nodeInfo.setTableName(rs.getString(1));
-                            nodeInfo.setNode(rs.getString(2));
-                            nodeInfo.setByteSize(rs.getLong(3));
-                            nodeInfo.setPrettySize(rs.getString(4));
-                            return nodeInfo;
-                        }
+                        "order by byte_size desc\n" +
+                        "offset " + offset + " rows fetch next " + perPage + " rows only\n", (rs, rowNum) -> {
+                    NodeTable nodeInfo = new NodeTable();
+                    nodeInfo.setTableName(rs.getString(1));
+                    nodeInfo.setNode(rs.getString(2));
+                    nodeInfo.setByteSize(rs.getLong(3));
+                    nodeInfo.setPrettySize(rs.getString(4));
+                    return nodeInfo;
+                }
         );
 
     }
 
-    public List<NodeTable> getTableNodeInfoMaster() {
+    public List<NodeTable> getTableNodeInfoMaster(Integer offset, Integer perPage) {
         return jdbcTemplate.query(
                 "SELECT\n" +
                         "relname AS table_name,\n" +
@@ -50,14 +51,15 @@ public class NodesTableInfoRepository {
                         "AND C .relkind <> 'i'\n" +
                         "AND nspname !~ '^pg_toast'\n" +
                         "AND relname not in (SELECT DISTINCT cs.table_name::varchar(255) FROM citus_shards cs)\n" +
-                        "ORDER BY byte_size DESC", (rs, rowNum) -> {
-                            NodeTable nodeInfo = new NodeTable();
-                            nodeInfo.setTableName(rs.getString(1));
-                            nodeInfo.setNode(rs.getString(2));
-                            nodeInfo.setByteSize(rs.getLong(3));
-                            nodeInfo.setPrettySize(rs.getString(4));
-                            return nodeInfo;
-                        }
+                        "ORDER BY byte_size DESC\n" +
+                        "offset " + offset + " rows fetch next " + perPage + " rows only\n", (rs, rowNum) -> {
+                    NodeTable nodeInfo = new NodeTable();
+                    nodeInfo.setTableName(rs.getString(1));
+                    nodeInfo.setNode(rs.getString(2));
+                    nodeInfo.setByteSize(rs.getLong(3));
+                    nodeInfo.setPrettySize(rs.getString(4));
+                    return nodeInfo;
+                }
         );
     }
 
