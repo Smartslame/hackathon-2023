@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sbp.hack.hackdemo.dao.ClusterInfoDao;
+import sbp.hack.hackdemo.dto.DistributedNodeInfoDTO;
 import sbp.hack.hackdemo.dto.NodeInfoDTO;
 import sbp.hack.hackdemo.service.ClusterService;
 import sbp.hack.hackdemo.service.InfoService;
@@ -23,14 +25,18 @@ public class InfoController {
     private final ClusterService clusterService;
     private final InfoService infoService;
 
-    @GetMapping("/table-node-info")
-    public List<NodeInfoDTO> getTableNodeInfo(@RequestParam(name = "isCoordinator", defaultValue = "false") Boolean isCoordinator,
-                                              @RequestParam(name = "page", defaultValue = "1") Integer page,
-                                              @RequestParam(name = "per_page", defaultValue = "20") Integer perPage) {
+    @GetMapping("/table-node-coordinator")
+    public List<NodeInfoDTO> getTableNodeCoordinator(@RequestParam(name = "page", defaultValue = "1") Integer page,
+                                                     @RequestParam(name = "per_page", defaultValue = "20") Integer perPage) {
         Integer offset = perPage * (page - 1);
-        return isCoordinator
-                ? infoService.getCoordinatorInfo(offset, perPage)
-                : infoService.getCitusInfo(offset, perPage);
+        return infoService.getCoordinatorInfo(offset, perPage);
+    }
+
+    @GetMapping("/table-node-citus")
+    public List<DistributedNodeInfoDTO> getTableNodeCitus(@RequestParam(name = "page", defaultValue = "1") Integer page,
+                                                          @RequestParam(name = "per_page", defaultValue = "20") Integer perPage) {
+        Integer offset = perPage * (page - 1);
+        return infoService.getCitusInfo(offset, perPage);
     }
 
     @GetMapping("/dicts")
