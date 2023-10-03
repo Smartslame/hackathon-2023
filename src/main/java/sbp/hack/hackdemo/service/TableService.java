@@ -17,7 +17,10 @@ public class TableService {
     private final TableRepository tableRepository;
 
     public List<String> getDictTables() {
-        return tableRepository.getTables().stream().filter(this::isDict).collect(Collectors.toList());
+        return tableRepository.getTables()
+                .stream()
+                .filter(this::isDict)
+                .collect(Collectors.toList());
     }
 
     public Map<String, List<String>> listDicts() {
