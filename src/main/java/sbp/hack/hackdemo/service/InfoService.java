@@ -30,13 +30,13 @@ public class InfoService {
             typeDict.put(table, nodeInfoCitus.get(i).getType());
             if (summary.containsKey(table)) {
                 summary.put(table, summary.get(table) + nodeInfoCitus.get(i).getByteSize());
-                details.get(table).add(new DistributedNodeDetails(table,
+                details.get(table).add(new DistributedNodeDetails(nodeInfoCitus.get(i).getNode(),
                         nodeInfoCitus.get(i).getPort(),
                         nodeInfoCitus.get(i).getPrettySize()));
             } else {
                 summary.put(table, nodeInfoCitus.get(i).getByteSize());
                 ArrayList<DistributedNodeDetails> tmp = new ArrayList<>();
-                tmp.add(new DistributedNodeDetails(table,
+                tmp.add(new DistributedNodeDetails(nodeInfoCitus.get(i).getNode(),
                         nodeInfoCitus.get(i).getPort(),
                         nodeInfoCitus.get(i).getPrettySize()));
                 details.put(table, tmp);
