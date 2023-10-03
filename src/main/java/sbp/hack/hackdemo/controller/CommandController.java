@@ -1,39 +1,53 @@
 package sbp.hack.hackdemo.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import sbp.hack.hackdemo.service.CommandService;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
+import sbp.hack.hackdemo.service.CitusService;
 
 
 @RestController
-@RequestMapping("/api/cmd")
 @RequiredArgsConstructor
+@RequestMapping("/api/cmd")
 public class CommandController {
 
-    CommandService commandService;
+    private final CitusService citusService;
 
     @GetMapping("/rebalance")
     public String startRebalance() {
-        commandService.doBalance();
+        citusService.doBalance();
         return null;
     }
 
     @GetMapping("/rebalance/status")
     public String getRebalanceStatus() {
-        return commandService.getStatus();
+        return citusService.getStatus();
     }
 
     @GetMapping("/add/node")
     public String addNode(@RequestParam(name = "node") String node,
                           @RequestParam(name = "node") String port) {
-        commandService.addNode(node, port);
+        citusService.addNode(node, port);
         return null;
     }
 
+    @PostMapping("/distribute")
+    public void createDistributedTable(@RequestParam("tableName") String tableName,
+                                       @RequestParam("distrColumn") String distrColumn) {
+        citusService.createDistributedTable(tableName, distrColumn);
+    }
 
+    @PostMapping("/undistribute")
+    public void undistributeTable(@RequestParam("tableName") String tableName) {
+        citusService.undistributeTable(tableName);
+    }
+
+    @PostMapping("/make-reference")
+    public void makeReferenceTable(@RequestParam("tableName") String tableName) {
+        citusService.makeReference(tableName);
+    }
+
+    @PostMapping("/unreference")
+    public void unreferenceTable(@RequestParam("tableName") String tableName) {
+        citusService.unreference(tableName);
+    }
 }
