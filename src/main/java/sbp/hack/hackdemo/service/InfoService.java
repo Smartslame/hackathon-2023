@@ -22,7 +22,7 @@ public class InfoService {
                 .collect(Collectors.toList());
     }
 
-    public List<NodeInfoDTO> getMasterInfo() {
+    public List<NodeInfoDTO> getCoordinatorInfo() {
         List<NodeTable> nodeInfoMaster = nodesTableInfoRepository.getTableNodeInfoMaster();
         return nodeInfoMaster.stream().map(x -> new NodeInfoDTO(x.getTableName(),
                         x.getNode(),
