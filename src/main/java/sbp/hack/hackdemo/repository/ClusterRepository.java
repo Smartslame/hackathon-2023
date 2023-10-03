@@ -19,4 +19,12 @@ public class ClusterRepository {
                 )
                 .getResultList();
     }
+
+    public List<Boolean> getNodeHealth(String ip) {
+        return entityManager.createNativeQuery(
+                        "select result from citus_check_cluster_node_health() where to_nodename = :ip"
+                )
+                .setParameter("ip", ip)
+                .getResultList();
+    }
 }
