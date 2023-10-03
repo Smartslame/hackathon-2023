@@ -3,6 +3,7 @@ package sbp.hack.hackdemo.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sbp.hack.hackdemo.dao.ClusterInfoDao;
 import sbp.hack.hackdemo.entity.PgDistNodeEntity;
 import sbp.hack.hackdemo.service.ClusterService;
 import sbp.hack.hackdemo.service.TableService;
@@ -38,8 +39,8 @@ public class MainController {
         }
     }
 
-    @GetMapping("/clusterinfo")
-    public List<PgDistNodeEntity> getClusterInfo() {
+    @GetMapping("/api/cluster-info")
+    public List<ClusterInfoDao> getClusterInfo() {
         return clusterService.getClusterInfo();
     }
 
